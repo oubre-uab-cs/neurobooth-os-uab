@@ -13,6 +13,7 @@ import neurobooth_os.iout.metadator as meta
 from neurobooth_os.iout.eyelink_tracker import EyeTracker
 from neurobooth_os.iout.mouse_tracker import MouseStream
 from neurobooth_os.iout.microphone import MicStream
+from neurobooth_os.iout.webcam import VidRec_Webcam
 from neurobooth_os.msg.messages import DeviceInitialization, Request
 
 
@@ -36,13 +37,17 @@ def start_yeti_stream(_, device_args):
     return device
 
 
+def start_webcam_stream(_, device_args):
+    return VidRec_Webcam(device_args)
+
+
 # --------------------------------------------------------------------------------
 # Device Configurations
 # TODO: Server assignment and device setup should all be derived from config files!!!
 # --------------------------------------------------------------------------------
 
 SERVER_ASSIGNMENTS: Dict[str, List[str]] = {
-    'acquisition': ['Mic_Yeti_dev_1'],
+    'acquisition': ['Mic_Yeti_dev_1', 'Webcam_1'],
     'presentation': ['Eyelink_1', 'Mouse'],
 }
 
@@ -52,6 +57,7 @@ DEVICE_START_FUNCS: Dict[str, Callable] = {
     'Eyelink_1': start_eyelink_stream,
     'Mic_Yeti_dev_1': start_yeti_stream,
     'Mouse': start_mouse_stream,
+    'Webcam_1': start_webcam_stream,
 }
 
 
@@ -156,7 +162,7 @@ class DeviceManager:
     @staticmethod
     def is_camera(stream_name: str) -> bool:
         """Test to see if a stream is a camera stream based on its name."""
-        return stream_name.split("_")[0] in ["hiFeed", "FLIR", "Intel", "IPhone"]
+        return stream_name.split("_")[0] in ["hiFeed", "FLIR", "Intel", "IPhone", "Webcam"]
 
     def get_camera_streams(self, task_devices: List[DeviceArgs]) -> List[Any]:
         device_ids = [dev.device_id for dev in task_devices]
