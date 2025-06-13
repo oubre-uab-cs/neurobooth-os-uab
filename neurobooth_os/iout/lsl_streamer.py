@@ -18,6 +18,7 @@ from neurobooth_os.iout.microphone import MicStream
 from neurobooth_os.iout.mbient import Mbient
 from neurobooth_os.iout.camera_intel import VidRec_Intel
 from neurobooth_os.iout.flir_cam import VidRec_Flir
+from neurobooth_os.iout.webcam import VidRec_Webcam
 from neurobooth_os.iout.iphone import IPhone
 from neurobooth_os.msg.messages import DeviceInitialization, Request
 
@@ -55,6 +56,10 @@ def start_flir_stream(_, device_args):
 def start_iphone_stream(_, device_args):
     device = IPhone(name="IPhoneFrameIndex", device_args=device_args)
     return device if device.prepare() else None
+
+
+def start_webcam_stream(_, device_args):
+    return VidRec_Webcam(device_args)
 
 
 def start_yeti_stream(_, device_args):
